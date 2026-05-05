@@ -1,0 +1,37 @@
+{
+  "summary": {
+    "total_resources": 10,
+    "total_drifted": 3,
+    "total_unmanaged": 2,
+    "total_deleted": 1,
+    "total_managed": 7,
+    "coverage": 70.0
+  },
+  "managed": [
+    { "id": "i-0abc123", "type": "aws_instance" },
+    { "id": "bucket-prod", "type": "aws_s3_bucket" },
+    { "id": "vpc-main", "type": "aws_vpc" }
+  ],
+  "unmanaged": [
+    { "id": "sg-untracked", "type": "aws_security_group" },
+    { "id": "eip-12345", "type": "aws_eip" }
+  ],
+  "deleted": [
+    { "id": "subnet-old", "type": "aws_subnet" }
+  ],
+  "differences": [
+    {
+      "res": { "id": "i-0abc123", "type": "aws_instance" },
+      "changes": [
+        { "type": "update", "path": "instance_type", "before": "t2.micro", "after": "t3.micro", "computed": [] },
+        { "type": "update", "path": "tags.Owner", "before": "alice", "after": "bob", "computed": [] }
+      ]
+    },
+    {
+      "res": { "id": "bucket-prod", "type": "aws_s3_bucket" },
+      "changes": [
+        { "type": "update", "path": "versioning.enabled", "before": false, "after": true, "computed": [] }
+      ]
+    }
+  ]
+}
