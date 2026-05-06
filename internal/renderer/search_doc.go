@@ -18,3 +18,17 @@
 //
 // An empty query string disables search and returns all resources.
 package renderer
+
+import "strings"
+
+// matchesSearch reports whether the resource identified by resourceID or
+// resourceType contains query as a case-insensitive substring. It returns
+// true unconditionally when query is empty, effectively disabling filtering.
+func matchesSearch(resourceID, resourceType, query string) bool {
+	if query == "" {
+		return true
+	}
+	q := strings.ToLower(query)
+	return strings.Contains(strings.ToLower(resourceID), q) ||
+		strings.Contains(strings.ToLower(resourceType), q)
+}
