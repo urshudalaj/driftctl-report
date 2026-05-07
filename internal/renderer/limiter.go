@@ -21,6 +21,11 @@ func (b *resourceBucket) totalCount() int {
 	return len(b.Managed) + len(b.Unmanaged) + len(b.Missing) + len(b.Different)
 }
 
+// isEmpty returns true when all categories contain no resources.
+func (b *resourceBucket) isEmpty() bool {
+	return b.totalCount() == 0
+}
+
 // limitResources truncates the bucket so that the total resource count does
 // not exceed max. A max of 0 is a no-op. Returns the number of omitted items.
 func limitResources(b *resourceBucket, max int) int {
