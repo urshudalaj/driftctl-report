@@ -1,20 +1,19 @@
-// Package renderer provides HTML rendering capabilities for driftctl analysis
-// results.
+// Package renderer provides utilities for rendering driftctl analysis
+// results as human-readable HTML reports.
 //
 // # Grouper
 //
-// The grouper module provides utilities for organising flat resource slices
-// into typed groups, making it straightforward for templates and other
-// rendering stages to iterate over resources by their resource type.
+// The grouper module organises flat resource slices into ordered buckets
+// keyed by resource type. This makes it straightforward for templates to
+// render a collapsible section per type rather than a single flat table.
 //
-// groupByType and groupDiffByType both preserve the order in which each
-// distinct type is first encountered in the input slice, so the output is
-// deterministic given a consistently ordered input (e.g. after sorting).
+// groupByType accepts a slice of managed/unmanaged resources and returns
+// a slice of Bucket values whose order is determined by the first
+// occurrence of each type in the input slice.
 //
-// Typical usage inside the renderer pipeline:
+// groupDiffByType performs the same operation for drifted (changed)
+// resources, which carry additional diff metadata.
 //
-//	groups := groupByType(filteredResources)
-//	for _, g := range groups {
-//		// render g.Type heading and g.Resources rows
-//	}
+// Both functions are pure and produce no side-effects; they are safe to
+// call concurrently.
 package renderer
