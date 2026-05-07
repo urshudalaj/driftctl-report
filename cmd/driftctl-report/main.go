@@ -37,9 +37,9 @@ func run() error {
 		return fmt.Errorf("parsing input file %q: %w", inputFile, err)
 	}
 
-	out, err := os.Create(outputFile)
+	out, err := createOutputFile(outputFile)
 	if err != nil {
-		return fmt.Errorf("creating output file %q: %w", outputFile, err)
+		return err
 	}
 	defer out.Close()
 
@@ -50,4 +50,15 @@ func run() error {
 
 	fmt.Printf("Report written to %s\n", outputFile)
 	return nil
+}
+
+// createOutputFile opens the output file for writing, returning a descriptive
+// error if the file cannot be created (e.g. due to permission issues or an
+// invalid path).
+func createOutputFile(path string) (*os.File, error) {
+	f, err := os.Create(path)
+	if err != nil {
+		return nil, fmt.Errorf("creating output file %q: %w", path, err)
+	}
+	return f, nil
 }
