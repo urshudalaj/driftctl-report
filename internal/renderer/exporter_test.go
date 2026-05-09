@@ -62,6 +62,32 @@ func TestExportTo_FailingWriter(t *testing.T) {
 	}
 }
 
+// TestExportToFile_ContentMatchesExportTo verifies that ExportToFile writes
+// exactly the same content that ExportTo would produce for the same renderer.
+func TestExportToFile_ContentMatchesExportTo(t *testing.T) {
+	report := sampleReport()
+
+	var buf bytes.Buffer
+	if err := NewExporter(New(report)).ExportTo(&buf); err != nil {
+		t.Fatalf("ExportTo returned unexpected error: %v", err)
+	}
+
+	dir := t.TempDir()
+	outPath := filepath.Join(dir, "report.html")
+	if err := NewExporter(New(report)).ExportToFile(outPath); err != nil {
+		t.Fatalf("ExportToFile returned unexpected error: %v", err)
+	}
+
+	data, err := os.ReadFile(outPath)
+	if err != nil {
+		t.Fatalf("could not read output file: %v", err)
+	}
+
+	if buf.String() != string(data) {
+		t.Error("ExportToFile content does not match ExportTo output")
+	}
+}
+
 // failWriter always returns an error on Write.
 type failWriter struct{}
 
