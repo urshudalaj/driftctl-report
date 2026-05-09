@@ -1,7 +1,7 @@
 package renderer
 
-// WithWatermark sets a custom watermark text displayed in the report footer.
-// An empty string disables the watermark.
+// WithWatermark sets the watermark text displayed on the report.
+// An empty string clears any previously set watermark.
 func WithWatermark(text string) Option {
 	return func(o *Options) {
 		o.WatermarkText = text
@@ -9,20 +9,25 @@ func WithWatermark(text string) Option {
 }
 
 // WithWatermarkURL sets a URL that the watermark text links to.
-// Has no effect if WatermarkText is empty.
+// Has no effect if no watermark text is set.
 func WithWatermarkURL(url string) Option {
 	return func(o *Options) {
 		o.WatermarkURL = url
 	}
 }
 
-// WithWatermarkPosition sets the position of the watermark in the report.
-// Accepted values: "footer" (default), "header", "both".
-// Unknown values are silently ignored.
+// WithWatermarkPosition sets the position of the watermark on the page.
+// Accepted values: "top-left", "top-right", "bottom-left", "bottom-right".
+// Unknown values are silently ignored and the default is preserved.
 func WithWatermarkPosition(pos string) Option {
+	valid := map[string]bool{
+		"top-left":     true,
+		"top-right":    true,
+		"bottom-left":  true,
+		"bottom-right": true,
+	}
 	return func(o *Options) {
-		switch pos {
-		case "footer", "header", "both":
+		if valid[pos] {
 			o.WatermarkPosition = pos
 		}
 	}
