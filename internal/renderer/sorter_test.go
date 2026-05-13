@@ -48,6 +48,21 @@ func TestSortResources_ByIDDesc(t *testing.T) {
 	}
 }
 
+func TestSortResources_ByIDAsc(t *testing.T) {
+	resources := []resource.Resource{
+		makeResource("gamma", "aws_iam_role"),
+		makeResource("alpha", "aws_iam_role"),
+		makeResource("beta", "aws_iam_role"),
+	}
+	sortResources(resources, SortByIDAsc)
+	if resources[0].ResourceId() != "alpha" {
+		t.Errorf("expected alpha first, got %s", resources[0].ResourceId())
+	}
+	if resources[2].ResourceId() != "gamma" {
+		t.Errorf("expected gamma last, got %s", resources[2].ResourceId())
+	}
+}
+
 func TestSortResources_Empty(t *testing.T) {
 	var resources []resource.Resource
 	sortResources(resources, SortByTypeAsc)
