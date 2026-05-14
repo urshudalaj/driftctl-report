@@ -74,3 +74,15 @@ func applyOptions(base Options, opts []Option) Options {
 	}
 	return base
 }
+
+// Validate checks that the Options fields contain acceptable values.
+// It returns an error describing the first invalid field encountered.
+func (o Options) Validate() error {
+	if o.Title == "" {
+		return fmt.Errorf("renderer: Title must not be empty")
+	}
+	if o.MaxResources < 0 {
+		return fmt.Errorf("renderer: MaxResources must be >= 0, got %d", o.MaxResources)
+	}
+	return nil
+}
