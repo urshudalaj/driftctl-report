@@ -92,3 +92,16 @@ func TestBuildBreakdown_Empty(t *testing.T) {
 		t.Fatalf("expected 0 entries, got %d", len(result.Entries))
 	}
 }
+
+// TestBuildBreakdown_TopNGreaterThanEntries verifies that when BreakdownTopN
+// exceeds the number of available resource types, all entries are returned
+// without panicking or truncating incorrectly.
+func TestBuildBreakdown_TopNGreaterThanEntries(t *testing.T) {
+	opts := DefaultOptions()
+	opts.ShowBreakdown = true
+	opts.BreakdownTopN = 100
+	result := buildBreakdown(makeBreakdownAnalysis(), opts)
+	if len(result.Entries) != 3 {
+		t.Fatalf("expected all 3 entries when TopN exceeds total, got %d", len(result.Entries))
+	}
+}
