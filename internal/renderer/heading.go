@@ -34,3 +34,10 @@ func buildHeading(o Options) HeadingData {
 		Level:   level,
 	}
 }
+
+// IsValid reports whether the HeadingData is in a renderable state.
+// A heading is considered valid when it is enabled and contains non-empty text
+// with a level in the accepted HTML range (1–6).
+func (h HeadingData) IsValid() bool {
+	return h.Enabled && h.Text != "" && h.Level >= 1 && h.Level <= 6
+}
