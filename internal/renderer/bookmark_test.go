@@ -91,3 +91,20 @@ func TestBuildBookmarks_UnknownIDsIgnored(t *testing.T) {
 		t.Fatalf("expected 0 entries for unknown IDs, got %d", len(data.Entries))
 	}
 }
+
+func TestBuildBookmarks_EntryFieldsPopulated(t *testing.T) {
+	o := DefaultOptions()
+	WithBookmarks(true)(&o)
+	WithBookmarkIDs("vpc-aaa")(&o)
+	data := buildBookmarks(makeBookmarkAnalysis(), o)
+	if len(data.Entries) != 1 {
+		t.Fatalf("expected 1 entry, got %d", len(data.Entries))
+	}
+	entry := data.Entries[0]
+	if entry.ID != "vpc-aaa" {
+		t.Errorf("expected entry ID 'vpc-aaa', got %q", entry.ID)
+	}
+	if entry.Type != "aws_vpc" {
+		t.Errorf("expected entry Type 'aws_vpc', got %q", entry.Type)
+	}
+}
